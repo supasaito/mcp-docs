@@ -1,0 +1,14 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.suparanku/suparanku",
+  "title": "Suparanku",
+  "description": "AI representation management for the Japanese market: read and act on how ChatGPT, Claude, Gemini and Google AI Overviews describe your brand — visibility, position, sentiment, competitors, cited sources, recommendations, content briefs, and an AI-readiness site audit (SRPS).",
+  "version": "1.0.0",
+  "websiteUrl": "https://suparanku.com/ja/mcp/",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://app.suparanku.com/api/mcp/v1"
+    }
+  ]
+}
