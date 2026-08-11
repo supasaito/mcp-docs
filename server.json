@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "com.suparanku/suparanku",
   "title": "Suparanku",
-  "description": "AI representation management for Japan: see and change how AI assistants describe your brand.",
+  "description": "See and change how AI assistants describe your brand — AI representation management.",
   "version": "1.0.0",
   "websiteUrl": "https://suparanku.com/ja/mcp/",
   "remotes": [

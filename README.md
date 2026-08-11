@@ -1,6 +1,6 @@
 # Suparanku MCP Server
 
-Remote [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server for **[Suparanku（スーパーランク）](https://suparanku.com)** — the AI representation management system for the Japanese market.
+Remote [MCP (Model Context Protocol)](https://modelcontextprotocol.io) server for **[Suparanku（スーパーランク）](https://suparanku.com)** — the AI representation management system: see and change how AI represents your business.
 
 Connect any MCP-compatible AI client or agent (Claude, Claude Code, Cursor, Cline, custom agents) to your brand's AI-visibility data: how ChatGPT, Claude, Gemini and Google AI Overviews talk about your brand — and act on it.
 
