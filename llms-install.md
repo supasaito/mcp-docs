@@ -31,7 +31,7 @@ Add to `cline_mcp_settings.json` (MCP Servers → Configure):
 
 ## Verify
 
-After connecting, call `suparanku_help` (overview + full tool list) and then `suparanku_list_companies` — every other tool needs a `company_id` from it. If a company shows `mcp_access: "none"`, enable MCP access for it in the Suparanku app.
+After connecting, call `suparanku_help` (overview + full tool list) and then `suparanku_list_companies` — every other tool needs a `company_id` from it. For a first useful answer, `suparanku_get_dynamics_summary` reports what changed since the previous scan. If a company shows `mcp_access: "none"`, enable MCP access for it in the Suparanku app.
 
 If the account has no company yet — or you need another one — `suparanku_create_company` creates a workspace with its first brand and stops there: no onboarding audit is run, so you set the context up yourself (brand profile, aliases, domains, topics, prompts). It requires a read + write token scoped to all companies, admin or owner on a company with full MCP access, and a remaining company-creation allowance.
 

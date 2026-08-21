@@ -46,7 +46,8 @@ See [`llms-install.md`](./llms-install.md).
 
 First call `suparanku_list_companies` (every other tool takes a `company_id` from it), then:
 
-- **Analytics** — `suparanku_get_metrics`: visibility / position / sentiment / competitor share, grouped by topic, engine, competitor or prompt; trends or any past scan.
+- **Analytics (latest scan)** — `suparanku_get_metrics`: visibility / position / sentiment / competitor share, grouped by topic, engine, competitor or prompt; trends or any past scan.
+- **Dynamics (scan over scan)** — `suparanku_get_dynamics_summary` answers "what changed since the last scan" in one call: the headline numbers with their move, every topic ranked with its change and who leads it, every tracked brand with its change. `suparanku_get_visibility_dynamics` draws the movement itself — visibility, average position or sentiment, cut by brand, topic or assistant. `suparanku_get_sources_dynamics` does the same for what the assistants read. Every point carries how many runs it stands on, how many recommendations were published since the previous scan, and a flag when the measured prompt set changed in between — so a rise across a changed measurement is never reported as a clean result.
 - **Sources & citations** — which domains AI answers cite in your market (`suparanku_get_sources`), and where competitors get cited while you don't (`suparanku_get_competitor_source_gap`) — a ready publication target list.
 - **Recommendations & content briefs** — prioritized PLAYBOOK recommendations (`suparanku_list_recommendations`), full briefs per publication (`suparanku_get_content_brief`), mark published URLs for re-measurement (`suparanku_mark_recommendation_published`).
 - **Site audit (SRPS)** — AI-readiness score for the whole site and per page (`suparanku_get_site_audit`, `suparanku_get_page_audit`), technical fix briefs with ready-to-paste artifacts, autonomous fix loop via `suparanku_run_site_fast_audit`.
@@ -60,6 +61,7 @@ Example agent prompts:
 > "Which domains cite my competitors but not me? Group by category."
 > "Run a fast site audit, then list the technical fixes with their briefs."
 > "Which Google queries do we already get impressions for but never rank on page one?"
+> "What changed since the last scan, and which of it followed something we published?"
 
 ## Security
 
@@ -76,4 +78,4 @@ Example agent prompts:
 
 ---
 
-**日本語**: SuparankuのリモートMCPサーバーです。MCP対応のAIクライアント／エージェント（Claude、Claude Code、Cursor、Clineなど）から、自社ブランドのAI可視性データ（可視性・順位・センチメント・競合・引用ソース）の読み取りと、改善提案・コンテンツブリーフ・サイト監査の操作ができます。エンドポイントは `https://app.suparanku.com/api/mcp/v1`、認証はPersonal Access Token（アプリの設定 → MCP・APIトークン）またはOAuth 2.1。有料プラン（Starter以上）でご利用いただけます。新しい企業ワークスペースやブランドの作成もMCPから行えます（無料の初回監査は実行されず、必要な処理はご自身のタイミングで開始できます）。Search Console・GA4と連携している場合は、実際の検索クエリ、インデックス状況、AIアシスタント別の流入まで取得できます。ツール一覧（自動生成・常に最新）: https://app.suparanku.com/docs/mcp
+**日本語**: SuparankuのリモートMCPサーバーです。MCP対応のAIクライアント／エージェント（Claude、Claude Code、Cursor、Clineなど）から、自社ブランドのAI可視性データ（可視性・順位・センチメント・競合・引用ソース）の読み取りと、改善提案・コンテンツブリーフ・サイト監査の操作ができます。エンドポイントは `https://app.suparanku.com/api/mcp/v1`、認証はPersonal Access Token（アプリの設定 → MCP・APIトークン）またはOAuth 2.1。有料プラン（Starter以上）でご利用いただけます。新しい企業ワークスペースやブランドの作成もMCPから行えます（無料の初回監査は実行されず、必要な処理はご自身のタイミングで開始できます）。Search Console・GA4と連携している場合は、実際の検索クエリ、インデックス状況、AIアシスタント別の流入まで取得できます。直近スキャンの数値だけでなく、スキャンごとの推移（自社と競合、トピック別、AIアシスタント別）も取得できます。各ポイントには測定回数、前回スキャン以降に公開した施策の件数、測定対象のプロンプト構成が変わったかどうかの印が付きます。ツール一覧（自動生成・常に最新）: https://app.suparanku.com/docs/mcp
