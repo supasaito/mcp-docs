@@ -3,8 +3,8 @@
   "name": "com.supasaito/supasaito",
   "title": "Supasaito",
   "description": "See and change how AI assistants describe your brand — AI representation management.",
-  "version": "4.0.0",
-  "websiteUrl": "https://supasaito.com/ja/platform/mcp/",
+  "version": "4.0.1",
+  "websiteUrl": "https://supasaito.com/en/platform/mcp/",
   "remotes": [
     {
       "type": "streamable-http",
