@@ -1,14 +1,14 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "com.suparanku/suparanku",
-  "title": "Suparanku",
+  "name": "com.supasaito/supasaito",
+  "title": "Supasaito",
   "description": "See and change how AI assistants describe your brand — AI representation management.",
-  "version": "1.0.2",
-  "websiteUrl": "https://suparanku.com/ja/mcp/",
+  "version": "4.0.0",
+  "websiteUrl": "https://supasaito.com/ja/platform/mcp/",
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://app.suparanku.com/api/mcp/v1"
+      "url": "https://platform.supasaito.com/api/mcp"
     }
   ]
 }
