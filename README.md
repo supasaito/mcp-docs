@@ -7,7 +7,7 @@ Connect any MCP-compatible AI client or agent (Claude, Claude Code, Cursor, Clin
 - **Endpoint:** `https://platform.supasaito.com/api/mcp` (remote, Streamable HTTP)
 - **Tool reference (generated, always current):** https://platform.supasaito.com/docs/mcp
 - **Auth:** Personal Access Token (app → Settings → MCP & API tokens) or OAuth 2.1
-- **Availability:** all paid plans (Starter, Business, Enterprise), read + write. A company created over MCP starts on the free plan with MCP switched on — reads and the zero-cost writes that shape the measured set (brand, topics, prompts, competitors, sources) work immediately, while scans, site audits, content briefs and market research wait for a paid plan.
+- **Availability:** all paid plans (Starter, Business, Enterprise), read + write. A company created over MCP starts on the free plan with MCP switched on — reads and the zero-cost writes that shape the measured set (brand, categories, prompts, competitors, sources) work immediately, while scans, site audits, content briefs and market research wait for a paid plan.
 
 ## Quick start
 
@@ -42,17 +42,19 @@ claude mcp add --transport http supasaito https://platform.supasaito.com/api/mcp
 
 See [`llms-install.md`](./llms-install.md).
 
+Prompt groups are called **Categories** (previously **Topics**). Existing tool names such as `supasaito_list_topics`, the `topic_id` field and `topic` / `topics` grouping values stay unchanged. `supasaito_explain_term` accepts either name. A prompt has one category or is Uncategorized; deleting a category keeps its prompts and answers.
+
 ## What you can do
 
 First call `supasaito_list_companies`; company-scoped tools take a `company_id` from it. Pass an explicit `brand_id` when managing several brands. Then:
 
-- **Analytics (latest scan)** — `supasaito_get_metrics`: visibility / position / sentiment / competitor share, grouped by topic, engine, competitor or prompt; trends or any past scan.
-- **Dynamics (scan over scan)** — `supasaito_get_dynamics_summary` answers "what changed since the last scan" in one call: the headline numbers with their move, every topic ranked with its change and who leads it, every tracked brand with its change. `supasaito_get_visibility_dynamics` draws the movement itself — visibility, average position or sentiment, cut by brand, topic or assistant. `supasaito_get_sources_dynamics` does the same for what the assistants read. Every point carries how many runs it stands on, how many recommendations were published since the previous scan, and a flag when the measured prompt set changed in between — so a rise across a changed measurement is never reported as a clean result.
+- **Analytics (latest scan)** — `supasaito_get_metrics`: visibility / position / sentiment / competitor share, grouped by category, engine, competitor or prompt; trends or any past scan.
+- **Dynamics (scan over scan)** — `supasaito_get_dynamics_summary` answers "what changed since the last scan" in one call: the headline numbers with their move, every category ranked with its change and who leads it, every tracked brand with its change. `supasaito_get_visibility_dynamics` draws the movement itself — visibility, average position or sentiment, cut by brand, category or assistant. `supasaito_get_sources_dynamics` does the same for what the assistants read. Every point carries how many runs it stands on, how many recommendations were published since the previous scan, and a flag when the measured prompt set changed in between — so a rise across a changed measurement is never reported as a clean result.
 - **Sources & citations** — which domains AI answers cite in your market (`supasaito_get_sources`), and where competitors get cited while you don't (`supasaito_get_competitor_source_gap`) — a ready publication target list.
 - **Recommendations & content briefs** — prioritized recommendations (`supasaito_list_recommendations`), full briefs per publication (`supasaito_get_content_brief`), mark published URLs for re-measurement (`supasaito_mark_recommendation_published`).
 - **Site audit (SSPS)** — AI-readiness score for the whole site and per page (`supasaito_get_site_audit`, `supasaito_get_page_audit`), technical fix briefs with ready-to-paste artifacts, autonomous fix loop via `supasaito_run_site_fast_audit`.
 - **Search & AI traffic** — everything we hold from the brand's own Search Console and GA4: the real queries people typed (`supasaito_get_search_queries`), per-page search performance, indexing status with the full URL-Inspection diagnosis, daily series, traffic split per AI assistant and per channel (`supasaito_get_traffic_channels`), one page's full proof loop from published to first cited (`supasaito_get_page_traffic_detail`), and the connection status that tells "not connected" apart from "no data yet" (`supasaito_get_google_integration_status`).
-- **Management (write)** — brands, topics, prompts, competitors, source categories, tracked URLs; trigger scans, site audits, market research and PDF reports.
+- **Management (write)** — brands, categories, prompts, competitors, source categories, tracked URLs; trigger scans, site audits, market research and PDF reports.
 - **New workspaces (write)** — `supasaito_create_company` requires an explicit `free_audit: "run" | "skip"` decision. `run` starts the free audit; poll `supasaito_get_free_audit_progress` and wait for completion before writing context. `skip` creates the workspace without spending its free audit. Company creation requires write scope, portfolio-derived admin/owner eligibility and remaining creation allowance. Scope the token to all companies if it must reach newly created ones. `supasaito_create_brand` adds a brand to an existing paid company and crawls it; it does not run the company’s free audit.
 - **Context and publishing work** — shared company metadata, versioned business documents, channel/placement setup, uploaded assets, campaigns and custom tasks. Required business documents are `brand.business` and `brand.customers`; read document guidance before writing.
 - **Parallel agents** — `supasaito_actions_claim_next_task` atomically assigns eligible work or review. A task contains its own submission and review; write and review calls use fencing versions. Use distinct credentials for independent participants. Company rate limits are shared, not multiplied by agent count. Creation tools accept `request_id` for safe retries; list and long-text reads are paginated.
@@ -83,7 +85,7 @@ Example agent prompts:
 
 ---
 
-**日本語**: Supasaito (スーパーサイト) のリモートMCPサーバーです。MCP対応のAIクライアント／エージェント（Claude、Claude Code、Cursor、Clineなど）から、自社ブランドのAI可視性データ（可視性・順位・センチメント・競合・引用ソース）の読み取りと、改善提案・コンテンツブリーフ・サイト監査の操作ができます。エンドポイントは `https://platform.supasaito.com/api/mcp`、認証はPersonal Access Token（アプリの設定 → MCP・APIトークン）またはOAuth 2.1。有料プラン（Starter以上）でご利用いただけます。新しい企業ワークスペースやブランドの作成もMCPから行えます（企業の作成時に、無料の初回監査を実行するかどうかを明示的に選択します）。Search Console・GA4と連携している場合は、実際の検索クエリ、インデックス状況、AIアシスタント別の流入まで取得できます。直近スキャンの数値だけでなく、スキャンごとの推移（自社と競合、トピック別、AIアシスタント別）も取得できます。各ポイントには測定回数、前回スキャン以降に公開した施策の件数、測定対象のプロンプト構成が変わったかどうかの印が付きます。v4からツール名は `supasaito_*` です（バージョンを固定した `/api/mcp/v1`〜`/api/mcp/v3` は従来の `suparanku_*` のまま利用できます）。ツール一覧（自動生成・常に最新）: https://platform.supasaito.com/docs/mcp
+**日本語**: Supasaito (スーパーサイト) のリモートMCPサーバーです。MCP対応のAIクライアント／エージェント（Claude、Claude Code、Cursor、Clineなど）から、自社ブランドのAI可視性データ（可視性・順位・センチメント・競合・引用ソース）の読み取りと、改善提案・コンテンツブリーフ・サイト監査の操作ができます。エンドポイントは `https://platform.supasaito.com/api/mcp`、認証はPersonal Access Token（アプリの設定 → MCP・APIトークン）またはOAuth 2.1。有料プラン（Starter以上）でご利用いただけます。新しい企業ワークスペースやブランドの作成もMCPから行えます（企業の作成時に、無料の初回監査を実行するかどうかを明示的に選択します）。Search Console・GA4と連携している場合は、実際の検索クエリ、インデックス状況、AIアシスタント別の流入まで取得できます。直近スキャンの数値だけでなく、スキャンごとの推移（自社と競合、カテゴリ別、AIアシスタント別）も取得できます。各ポイントには測定回数、前回スキャン以降に公開した施策の件数、測定対象のプロンプト構成が変わったかどうかの印が付きます。v4からツール名は `supasaito_*` です（バージョンを固定した `/api/mcp/v1`〜`/api/mcp/v3` は従来の `suparanku_*` のまま利用できます）。ツール一覧（自動生成・常に最新）: https://platform.supasaito.com/docs/mcp
 
 ## Brand scope and publication flow
 

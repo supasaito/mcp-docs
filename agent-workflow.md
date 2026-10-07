@@ -84,7 +84,7 @@ state what is unknown; do not infer lead counts or sales from page visits.
 
 ### 3. Measure and choose recommendations
 
-Create or generate topics/prompts, track competitors and run the allowed scans.
+Create or generate categories/prompts, track competitors and run the allowed scans.
 Poll the specific generation/scan status instead of starting duplicate jobs.
 Inspect metrics, sources, sentiment and scan-over-scan dynamics. Source and
 competitor markup reuses collected answers; it does not require another paid scan.
