@@ -91,6 +91,18 @@ competitor markup reuses collected answers; it does not require another paid sca
 If Google is connected, inspect real-demand candidates and apply one atomic
 accept/dismiss verdict per batch. Accepted demand leads prompt generation.
 
+For recommendations with contentPlan, inspect each active action's readiness,
+target, format and inputHash. Resolve missing data with supasaito_clarify_content_plan
+and read the updated plan before generating a brief. Recommendations and clarifications
+use deterministic rules; only requested brief text uses the model. Pass the action
+key, expected_revision and input_hash to supasaito_generate_content_brief. Repeated
+identical requests reuse the existing generation. Save results against that action.
+A campaign captures the recommendation; review changes before explicitly calling
+supasaito_actions_apply_recommendation_plan. Add placements with source_action_key. Use supasaito_actions_update_campaign_placement
+to explicitly bind an unpublished legacy placement; its action fixes the publication language.
+A first publication does not complete the remaining accepted actions. Legacy cards
+and their own/domain publication keys remain supported.
+
 Read recommendations and their evidence before choosing work. For a content
 campaign use supasaito_actions_add_idea or supasaito_actions_start_campaign with
 recommendation_id. For technical, data or other standalone work use
