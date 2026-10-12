@@ -72,6 +72,8 @@ On a server advertising **v5.7 or later**, `supasaito_get_page_audit` returns th
 
 On a server advertising **v5.9 or later**, `supasaito_get_content_matrix` takes `dimension: "format"` for citations by page format (article, list or ranking, comparison, how-to, FAQ, fact sheet, landing page, other and undetermined), and the competitor reads take a funnel `stages` filter. New reads cover the remaining console cuts: `supasaito_get_funnel_visibility`, `supasaito_get_sentiment`, `supasaito_get_competitor_sources` (domains each competitor is cited from), `supasaito_get_site_content_breakdown` (your site's page categories with AI citations) and `supasaito_list_dismissed_competitors`.
 
+On a server advertising **v5.10 or later**, page types are the page's role on its site and no longer overlap the page format: `editorial` (blog and media), `product`, `service`, `case`, `pricing`, `docs`, `about`, `news`, `home`, `other`. The retired `guide` and `ranking` are still accepted on input and mean `editorial`. The format (article, list or ranking, comparison, how-to, FAQ, fact sheet, landing) is the separate `dimension: "format"` axis, and content recommendations take the format AI cites for a category into account.
+
 Example agent prompts:
 
 > "Pull this week's open recommendations for my brand and summarize the top 3 by impact."
