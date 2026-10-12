@@ -113,6 +113,12 @@ Create or generate categories/prompts, track competitors and run the allowed sca
 Poll the specific generation/scan status instead of starting duplicate jobs.
 Inspect metrics, sources, sentiment and scan-over-scan dynamics. Source and
 competitor markup reuses collected answers; it does not require another paid scan.
+To study one competitor, read supasaito_get_competitor_comparison and
+supasaito_get_content_matrix for that pair. supasaito_run_competitor_analysis is
+cost-bearing (one unit of the monthly competitor-analysis allowance; a launch while
+one runs is free): start it once, poll supasaito_get_competitor_analysis, and on a
+failure report its reason instead of retrying blindly. The analysis builds the
+competitor profile; briefs use it as facts about that competitor.
 If Google is connected, inspect real-demand candidates and apply one atomic
 accept/dismiss verdict per batch. Accepted demand leads prompt generation.
 
@@ -144,12 +150,17 @@ save concepts using each returned publication key, not its placement slug. Set
 language, link_role (original/rewrite/crosslink) and publish_not_before with
 update_campaign_placement. Set the role during preparation; changing the placement
 name does not set it. Rewrites and crosslinks require at least one included original
-and wait until every included original is published. Excluded originals do not block them. Plan measurement
+and wait until every included original is published. Excluded originals do not block them.
+Exclude a publication that is no longer needed. Delete one only when it was added by
+mistake and is not yet published: supasaito_actions_delete_campaign_placement removes
+it with its campaign documents irreversibly and needs confirm: true. Plan measurement
 before publication in placement.measure_plan: metric, data source/access, baseline
 and date, target, observation window and follow-up date. Explain unavailable metrics.
 
-Complete preparation, research facts and sources into campaign.canon, then create
-each placement.text and its assets under the corresponding creation task. The brief
+Complete preparation, then put the campaign master material into campaign.canon:
+the client's draft or full text, if there is one, that every publication is adapted
+from, plus the facts, sources, quotes and limits. Then adapt it into each
+placement.text and its assets under the corresponding creation task. The brief
 contains the applicable writing rules and acceptance criteria. Upload assets with
 create_upload, upload the bytes, then confirm_upload; inspect/download files using
 get_asset_download_url. Signed URLs expire and must not be published as permanent
