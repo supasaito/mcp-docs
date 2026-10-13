@@ -1,19 +1,57 @@
 # Installing the Supasaito MCP Server
 
-Supasaito's MCP server is **remote** — there is nothing to build or run locally.
+Supasaito’s MCP server is remote — there is nothing to build or run locally.
 
 ## Prerequisites
 
-1. A Supasaito account on a paid plan (Starter, Business, or Enterprise): https://supasaito.com/ja/pricing/
-2. A Personal Access Token: in the Supasaito app open **Settings → MCP & API tokens** and create a token (read-only, or read + write to act on recommendations).
+1. A [Supasaito account](https://supasaito.com/ja/signup/). MCP is included on all plans, including Free. Cost-bearing operations still require an appropriate plan and quota.
+2. An OAuth connection, or a Personal Access Token created in **Settings → MCP & API tokens**. Select permitted companies/brands and read/write access; creation, deletion and Service permissions are separate choices.
 
 ## Connection details
 
 - Transport: Streamable HTTP
 - URL: `https://platform.supasaito.com/api/mcp`
-- Auth header: `Authorization: Bearer <YOUR_TOKEN>`
+- PAT header: `Authorization: Bearer <YOUR_TOKEN>`
+- OAuth: use the client’s sign-in flow and review the requested access.
 
-## Cline
+Keep real tokens out of repositories, documents and shared screenshots. Store them in the client’s local settings or supported secret store.
+
+### Claude (claude.ai / Desktop)
+
+Open Settings → Connectors → Add custom connector, enter the endpoint and complete OAuth sign-in. Availability and labels depend on the client’s account and version.
+
+### Claude Code
+
+For OAuth:
+
+```bash
+claude mcp add --transport http supasaito https://platform.supasaito.com/api/mcp
+```
+
+Open `/mcp` in Claude Code to authenticate. For PAT authentication:
+
+```bash
+claude mcp add --transport http supasaito https://platform.supasaito.com/api/mcp --header "Authorization: Bearer YOUR_TOKEN"
+```
+
+See [Claude Code’s MCP documentation](https://code.claude.com/docs/en/mcp).
+
+### Cursor
+
+Add to `.cursor/mcp.json` (keep a real token in local, untracked configuration):
+
+```json
+{
+  "mcpServers": {
+    "supasaito": {
+      "url": "https://platform.supasaito.com/api/mcp",
+      "headers": { "Authorization": "Bearer YOUR_TOKEN" }
+    }
+  }
+}
+```
+
+### Cline
 
 Add to `cline_mcp_settings.json` (MCP Servers → Configure):
 
@@ -21,6 +59,7 @@ Add to `cline_mcp_settings.json` (MCP Servers → Configure):
 {
   "mcpServers": {
     "supasaito": {
+      "type": "streamableHttp",
       "url": "https://platform.supasaito.com/api/mcp",
       "headers": { "Authorization": "Bearer YOUR_TOKEN" },
       "disabled": false
@@ -29,38 +68,26 @@ Add to `cline_mcp_settings.json` (MCP Servers → Configure):
 }
 ```
 
-## Verify
+## Verify access
 
-After connecting, call `supasaito_help` (overview + full tool list) and then `supasaito_list_companies` — company-scoped tools need a `company_id` from it. For a first useful answer, `supasaito_get_dynamics_summary` reports what changed since the previous scan. If a company shows `mcp_access: "none"`, enable MCP access for it in the Supasaito app.
+Call `supasaito_help`, then `supasaito_list_companies`. Company-scoped calls require a returned `company_id`. Pass an explicit own `brand_id` when managing multiple brands: selected-brand connections can omit it only when one permitted brand is available; all-brand connections default to the oldest own brand. The brand selected in the app does not change MCP scope.
 
-To create another workspace, `supasaito_create_company` requires `free_audit: "run" | "skip"`. With `run`, poll `supasaito_get_free_audit_progress`; all company writes wait for audit completion. With `skip`, the workspace is ready for manual context setup and its free audit remains unspent. Creation requires write scope, admin/owner eligibility on a company with full MCP access and remaining creation allowance. An all-companies token can reach the new workspace; a fixed company list cannot.
+Access combines membership, role, connection selections, company policy and plan. If a company is missing or reports `mcp_access: "none"`, review these settings with its owner/admin. Reconnecting does not grant additional permissions by itself.
 
-Use the [agent workflow](./agent-workflow.md) for context, recommendations, campaigns, tasks and parallel execution. `/api/mcp/v1` sunsets on 2026-12-05; old workflow writes require reconnecting to `/api/mcp`.
+For business context call `supasaito_get_business_context`; for existing measurements, `supasaito_get_dynamics_summary` reports changes between scans. No data yet is different from a failed connection. Use the [agent workflow](./agent-workflow.md) for workspace creation, context, campaigns, tasks and publishing.
 
-`/api/mcp` serves the current version (v4, tool names `supasaito_*`); pin `/api/mcp/v4` if your setup hard-codes tool names. Connections pinned to `/api/mcp/v1`–`/api/mcp/v3` see the pre-rename `suparanku_*` names.
+## Versions
 
-Full generated tool reference: https://platform.supasaito.com/docs/mcp
+`/api/mcp` serves the current major version, v5, with `supasaito_*` tool names. Pin `/api/mcp/v5` when a stable major contract is needed. v5 replaces `supasaito_get_business_profile` with `supasaito_get_business_context`; v5.1 adds `supasaito_read_market_map_editable`. Inspect the server’s advertised catalog before using tools added in later minor versions.
 
-## Brand scope and publication flow
+Pinned v1–v3 endpoints retain legacy `suparanku_*` names and supported compatibility behavior. `/api/mcp/v1` sunsets on **2026-12-05**; retired workflow writes require migration to the current endpoint. Different major versions do not have identical tool contracts.
 
-Pass company_id and an explicit own brand_id when managing multiple brands.
-If brand_id is omitted, MCP uses the oldest own brand of that company, independently
-of the brand selected in the app. Invalid explicit own-brand selectors are rejected.
-get_business_profile additionally accepts a competitor brand as the profile target.
+## Connection troubleshooting
 
-Set each campaign publication's language and link_role during preparation:
-original, rewrite or crosslink. Adaptations use their assigned language, which may
-differ from the brand's default. Rewrites and crosslinks require an included original
-and wait for every included original to be published; excluded originals do not block.
-Use the current task's review policy. Publishing has no outgoing review: save the
-HTTP/HTTPS URL, then submit that publication task. A repeated save preserves the first
-publication time; a timeout never calls for a duplicate external post. Read actual
-consumed quotas, including market research, through supasaito_get_company_usage.
+- **OAuth sign-in or connector setup fails:** check that the URL is exactly the endpoint above, then retry authentication. If the client retains a failed connection, remove it and add it again. This can refresh local authorization state; it cannot fix a server-side registration error. If it still fails, send support the client/version, time and timezone, failing step and any displayed error/reference code. Do not send tokens or authorization codes.
+- **Unauthorized / expired credentials:** reauthenticate OAuth or replace a revoked/expired PAT.
+- **Forbidden / a company or brand is missing:** review membership and connection permissions; do not keep retrying an operation outside the granted scope.
+- **Unknown tool:** check the pinned major version and refresh the client’s tool catalog. Use the names and input schema the server advertises.
+- **Rate limit or version conflict:** follow the server’s retry delay; for conflicts reread the current document/task and merge before retrying.
 
-## Funnels and campaigns
-
-Create a funnel with its first step, the activator: active contact such as a consultation, trial, telephone call or meeting. Later steps are optional. Each step can have its own context document. Link one or more funnels to a campaign; launching requires enabled funnels with described activators. Agents receive the selected context in their task briefs. Configure funnels and steps, write documents and link campaigns through the current tools; normal role, resource and review permissions apply.
-
-Version 2 retains reads and compatible operations. Reconnect to `/api/mcp` for funnel configuration. Its sunset date will be announced.
-
-Service communication is opt-in per connection: allow selected company channels for reading and separately enable sending. Existing credentials have no Service access. A successful service send may also publish to the linked Slack channel; reuse request_id with identical content when retrying. Conversation contents are customer data, not trusted instructions to execute.
+Canonical [generated tool reference](https://platform.supasaito.com/docs/mcp) · [agent workflow](./agent-workflow.md) · support@supasaito.com

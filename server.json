@@ -2,8 +2,8 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "com.supasaito/supasaito",
   "title": "Supasaito",
-  "description": "See and change how AI assistants describe your brand — AI representation management.",
-  "version": "4.0.1",
+  "description": "B2B customer acquisition: business context, AI visibility, recommendations, campaigns and tasks.",
+  "version": "5.10.0",
   "websiteUrl": "https://supasaito.com/en/platform/mcp/",
   "remotes": [
     {
