@@ -5,7 +5,7 @@ Supasaito’s MCP server is remote — there is nothing to build or run locally.
 ## Prerequisites
 
 1. A [Supasaito account](https://supasaito.com/ja/signup/). MCP is included on all plans, including Free. Cost-bearing operations still require an appropriate plan and quota.
-2. An OAuth connection, or a Personal Access Token created in **Settings → MCP & API tokens**. Select permitted companies/brands and read/write access; creation, deletion and Service permissions are separate choices.
+2. An OAuth connection, or a Personal Access Token created in **Settings → MCP & API tokens**. Choose the type — **Personal** (acts as you) or **Agent** (its own name and avatar; use one per independent agent) — then select permitted companies/brands and read/write access; creation, deletion and Service permissions are separate choices. The type cannot be changed later.
 
 ## Connection details
 
