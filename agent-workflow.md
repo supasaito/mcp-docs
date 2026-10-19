@@ -115,8 +115,8 @@ Inspect metrics, sources, sentiment and scan-over-scan dynamics. Source and
 competitor markup reuses collected answers; it does not require another paid scan.
 To study one competitor, read supasaito_get_competitor_comparison and
 supasaito_get_content_matrix for that pair. supasaito_run_competitor_analysis is
-cost-bearing (one unit of the monthly competitor-analysis allowance; a launch while
-one runs is free): start it once, poll supasaito_get_competitor_analysis, and on a
+cost-bearing (one unit of the competitor-analysis allowance — monthly on paid plans,
+one-time on Free; a launch while one runs is free): start it once, poll supasaito_get_competitor_analysis, and on a
 failure report its reason instead of retrying blindly. The analysis builds the
 competitor profile; briefs use it as facts about that competitor.
 If Google is connected, inspect real-demand candidates and apply one atomic
@@ -225,7 +225,9 @@ Create follow-up tasks/campaigns only where the evidence supports them.
 ### 8. Parallel execution and retry rules
 
 Use distinct credentials for independent participants: one shared PAT or OAuth client
-is one actor, regardless of how many agent processes use it. Separate companies have
+is one actor, regardless of how many agent processes use it. Create them as **agent**
+connections so each appears under its own name and avatar; a **personal** connection
+acts as its human owner, including on tasks reserved for people and on reviews. Separate companies have
 separate budgets; all agents in one company share its cost-unit budget. More agents
 do not increase the subscription quota, rate allowance or external provider capacity.
 Size concurrency to useful independent tasks and measured stage capacity.

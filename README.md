@@ -6,12 +6,12 @@ Connect an MCP-compatible client or agent (Claude, Claude Code, Cursor, Cline or
 
 - **Endpoint:** `https://platform.supasaito.com/api/mcp` (remote, Streamable HTTP)
 - **Tool reference (generated, always current):** https://platform.supasaito.com/docs/mcp
-- **Auth:** Personal Access Token (app → Settings → MCP & API tokens) or OAuth 2.1
+- **Auth:** Personal Access Token (app → Settings → MCP & API tokens) or OAuth 2.1. Each connection is either **personal** (acts as you) or an **agent** (its own name and avatar), chosen at creation
 - **Availability:** MCP is included on all plans, including Free. Reads and eligible zero-cost writes are available within connection permissions; cost-bearing operations such as scans, audits, research and generation require the appropriate plan and remaining quota.
 
 ## Quick start
 
-You need a Supasaito account and an OAuth connection or Personal Access Token. For a token, open **Settings → MCP & API tokens**. Review the companies and brands it may access, read/write permissions and separate creation/deletion permissions. See [installation and troubleshooting](./llms-install.md).
+You need a Supasaito account and an OAuth connection or Personal Access Token. For a token, open **Settings → MCP & API tokens**. Choose the token type — **Personal** acts as you; **Agent** is an autonomous participant with its own name and avatar — then review the companies and brands it may access, read/write permissions and separate creation/deletion permissions. On OAuth the consent screen offers the same choice as the access type. See [installation and troubleshooting](./llms-install.md).
 
 ### Claude (claude.ai / Desktop)
 
@@ -66,7 +66,7 @@ Version 4 introduced `supasaito_*` tool names and `supasaito://` resources. The 
 
 On a server advertising **v5.2 or later**, `supasaito_get_business_context_tree` adds a navigation index of context documents and setup: titles, statuses and page links, without document bodies. Check the advertised catalog before using it; the live v5.1 server does not yet expose this tool.
 
-On a server advertising **v5.5 or later**, the Competitors section is available to agents: `supasaito_get_content_matrix` and `supasaito_get_content_matrix_urls` (which content AI answers cite, by page type — own site vs external sites — for you and each competitor), `supasaito_get_competitor_comparison` (by category, prompt and AI model), `supasaito_get_competitor_site` (the competitor's site next to yours), and `supasaito_run_competitor_analysis` with `supasaito_get_competitor_analysis` — a crawl of the competitor's primary site up to the plan's page limit with page types, site tree and competitor profile, one unit of the monthly competitor-analysis allowance; an analysis that finds no pages is not counted and reports why. `supasaito_set_page_type` corrects a page or section type; `supasaito_list_competitor_candidates` / `supasaito_resolve_competitor_candidate` handle unconfirmed spellings and sites of a competitor.
+On a server advertising **v5.5 or later**, the Competitors section is available to agents: `supasaito_get_content_matrix` and `supasaito_get_content_matrix_urls` (which content AI answers cite, by page type — own site vs external sites — for you and each competitor), `supasaito_get_competitor_comparison` (by category, prompt and AI model), `supasaito_get_competitor_site` (the competitor's site next to yours), and `supasaito_run_competitor_analysis` with `supasaito_get_competitor_analysis` — a crawl of the competitor's primary site up to the plan's page limit with page types, site tree and competitor profile, one unit of the competitor-analysis allowance (monthly on paid plans, a single one-time analysis on Free); an analysis that finds no pages is not counted and reports why. `supasaito_set_page_type` corrects a page or section type; `supasaito_list_competitor_candidates` / `supasaito_resolve_competitor_candidate` handle unconfirmed spellings and sites of a competitor.
 
 On a server advertising **v5.7 or later**, `supasaito_get_page_audit` returns the page's content analysis (type, purpose, format, funnel stage, target action and more) and `supasaito_list_prompts` returns each prompt's `funnelStage`. **v5.8** adds `supasaito_actions_delete_campaign_placement`, removes page speed from SSPS+ (PERF is reported separately; earlier site-level SSPS+ values are not comparable) and calls the measured AI assistants (ChatGPT, Claude, Gemini, AI Overviews) AI models in descriptions; field names such as `engine` and `provider_id` are unchanged.
 
@@ -87,6 +87,7 @@ Example agent prompts:
 
 - Access is the intersection of current membership and role, connection permissions, selected companies/brands, company policy, plan and task review rules. Future companies/brands and creation permissions require explicit opt-in.
 - PAT and OAuth permissions distinguish reads, writes and deletion. Destructive tools additionally require `confirm: true`. Company owners/admins can restrict a member’s connection access.
+- A **personal** connection acts as its owner: tasks for people, assigned work and reviews are done in the owner’s name. An **agent** connection is a separate participant with its own name and avatar and never exceeds its owner’s rights. The type is fixed at creation; connections created before the type existed are agents. Permissions are an upper limit, re-checked on every call against the owner’s current role, the company’s MCP setting and plan.
 - Core compute and database are in Tokyo; vendor processing and storage boundaries are described in the security documentation. Details: [supasaito.com/ja/platform/security](https://supasaito.com/ja/platform/security/)
 
 ## Links
@@ -98,7 +99,7 @@ Example agent prompts:
 
 ---
 
-**日本語**: Supasaito (スーパーサイト) はBtoB顧客獲得プラットフォームです。リモートMCPから、事業コンテキスト、AI可視性の測定、改善提案、キャンペーン、タスクを利用できます。エンドポイントは `https://platform.supasaito.com/api/mcp`、認証はPersonal Access TokenまたはOAuth 2.1です。MCPはFreeを含む全プランで利用できます。読み取りと利用可能な無料操作は接続権限の範囲内で実行でき、スキャン・調査・生成などは対応プランと残りの利用枠が必要です。v5では `supasaito_get_business_context` で事業情報を取得し、v5.1ではMarket Mapの編集用データを欠落なく読み取れます。[最新ツール一覧](https://platform.supasaito.com/docs/mcp)をご確認ください。
+**日本語**: Supasaito (スーパーサイト) はBtoB顧客獲得プラットフォームです。リモートMCPから、事業コンテキスト、AI可視性の測定、改善提案、キャンペーン、タスクを利用できます。エンドポイントは `https://platform.supasaito.com/api/mcp`、認証はPersonal Access TokenまたはOAuth 2.1です。接続は作成時に「個人」（あなたとして操作）か「エージェント」（独自の名前とアバター、所有者の権限を超えない）を選び、後から変更できません。MCPはFreeを含む全プランで利用できます。読み取りと利用可能な無料操作は接続権限の範囲内で実行でき、スキャン・調査・生成などは対応プランと残りの利用枠が必要です。v5では `supasaito_get_business_context` で事業情報を取得し、v5.1ではMarket Mapの編集用データを欠落なく読み取れます。[最新ツール一覧](https://platform.supasaito.com/docs/mcp)をご確認ください。
 
 ## Brand scope and publication flow
 
