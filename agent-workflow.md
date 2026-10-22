@@ -19,14 +19,14 @@ allowance. Reviewed connections also need explicit company-creation permission;
 the new company and its first brand are automatically added to their access. Legacy
 fixed-company scopes do not expand. With run, poll supasaito_get_free_audit_progress
 and wait for readiness before any company writes. With skip, build context manually.
-A new Free workspace permits its zero-cost operations; cost-bearing scans, research
+A new Free workspace permits its zero-cost operations; cost-bearing scans, audits
 and generation still require an appropriate plan. After an uncertain company-create
 response, reconcile list_companies by the intended company/domain before retrying.
 
 ### 2. Prepare company, business and market context
 
 Start with supasaito_get_business_context for current company/brand facts, own-brand
-documents and the accepted Market Map. A competitor target returns its identity and
+documents, including the market research. A competitor target returns its identity and
 profile document, not the own company’s internal context. Read
 supasaito_get_company_profile and update shared company facts with
 supasaito_update_company_profile. Registration country is a company fact, distinct
@@ -61,25 +61,20 @@ permission to name clients/partners), brand.copy (communication restrictions and
 tone), brand.priorities (current focus), brand.sources_public and
 brand.sources_private. Private sources must never be named, quoted or attributed
 in public work. Priorities remain active until changed; review reminders do not
-disable them. market.notes is optional reference material, not automatic task
-context. The accepted Market Map holds editable categories, players, criteria and purchase
-research. New research produces proposals; it does not silently overwrite accepted
-context. Factual business documents are seeded once and then maintained by people
+disable them. market.research describes how the market works and how buyers
+choose (buyer task and category, segments, buying process, maturity and rules,
+sources); it is written once when the brand is set up and then maintained like any
+other document. market.notes holds the team's own observations about the market.
+Factual business documents are seeded once and then maintained by people
 and agents. Read a document’s actual language and proposed changes; accept document
 proposals with supasaito_actions_apply_document_proposal against unchanged inputs.
 UI language, document working language, measurement language and each publication’s
 language are independent. Changing a language setting does not translate old text.
 
-Use supasaito_get_market_map for a display projection. Before editing, read
-supasaito_read_market_map_editable (v5.1+) for the whole map, a section or an item_id.
-Pin version_id and the same selection throughout pagination; concatenate all
-Unicode-character pages before parsing. Never reconstruct editable data from a
-truncated display. Save with supasaito_save_market_map using base_version_id and
-exactly one of map or patch. A patch preserves omitted fields/items; supplied arrays
-replace an entire section, while entity operations change selected IDs and remove
-items only explicitly. Full replacement must include everything retained. Preserve
-existing IDs and references. On CONFLICT reread the changed version and merge.
-Editing accepted context starts no research or measurement by itself.
+supasaito_get_market_map returns the buyers' language: the terms buyers search
+with, their monthly search volume, whether the site has a page about each term, how
+many prompts contain it and the open recommendations. The research is not repeated;
+correct the market description by editing market.research.
 
 On servers advertising v5.2+, supasaito_get_business_context_tree supplies the
 context navigation index with titles, statuses and page links, without document
@@ -110,6 +105,10 @@ state what is unknown; do not infer lead counts or sales from page visits.
 ### 3. Measure and choose recommendations
 
 Create or generate categories/prompts, track competitors and run the allowed scans.
+Generation fills categories: check supasaito_get_prompt_generation_status
+(next_batch shows the split), pass topic_ids to target chosen categories, and add a
+category when all are full (supasaito_request_category_suggestions →
+supasaito_get_category_suggestions → supasaito_create_topics_bulk).
 Poll the specific generation/scan status instead of starting duplicate jobs.
 Inspect metrics, sources, sentiment and scan-over-scan dynamics. Source and
 competitor markup reuses collected answers; it does not require another paid scan.
@@ -119,8 +118,8 @@ cost-bearing (one unit of the competitor-analysis allowance — monthly on paid 
 one-time on Free; a launch while one runs is free): start it once, poll supasaito_get_competitor_analysis, and on a
 failure report its reason instead of retrying blindly. The analysis builds the
 competitor profile; briefs use it as facts about that competitor.
-If Google is connected, inspect real-demand candidates and apply one atomic
-accept/dismiss verdict per batch. Accepted demand leads prompt generation.
+Buyer terms with demand and no page arrive as content recommendations; terms no
+prompt contains arrive as data recommendations.
 
 Read recommendations and their evidence before choosing work. For a content
 campaign use supasaito_actions_add_idea or supasaito_actions_start_campaign with
