@@ -78,7 +78,7 @@ For business context call `supasaito_get_business_context`; for existing measure
 
 ## Versions
 
-`/api/mcp` serves the current major version, v5, with `supasaito_*` tool names. Pin `/api/mcp/v5` when a stable major contract is needed. v5 replaces `supasaito_get_business_profile` with `supasaito_get_business_context`; v5.1 adds `supasaito_read_market_map_editable`. Inspect the server’s advertised catalog before using tools added in later minor versions.
+`/api/mcp` serves the current major version, v5, with `supasaito_*` tool names. Pin `/api/mcp/v5` when a stable major contract is needed. v5 replaces `supasaito_get_business_profile` with `supasaito_get_business_context`; v5.13 removes the market-map editing, market research and real-demand tools (the market research is now a business-context document). Inspect the server’s advertised catalog before using tools added in later minor versions.
 
 Pinned v1–v3 endpoints retain legacy `suparanku_*` names and supported compatibility behavior. `/api/mcp/v1` sunsets on **2026-12-05**; retired workflow writes require migration to the current endpoint. Different major versions do not have identical tool contracts.
 

@@ -72,9 +72,9 @@ UI language, document working language, measurement language and each publicatio
 language are independent. Changing a language setting does not translate old text.
 
 supasaito_get_market_map returns the buyers' language: the terms buyers search
-with, their monthly search volume, whether the site has a page about each term, how
-many prompts contain it and the open recommendations. The research is not repeated;
-correct the market description by editing market.research.
+with, their demand level and its source, whether the site has a page about each
+term, how many prompts contain it and the open recommendations. The research is not
+repeated; correct the market description by editing market.research.
 
 On servers advertising v5.2+, supasaito_get_business_context_tree supplies the
 context navigation index with titles, statuses and page links, without document
